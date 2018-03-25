@@ -16,7 +16,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 	public int numberOfVertices;
 	public Map<T, Integer> vertices;
 	public boolean[][] adjacencies;
-	//public Map<Adjacency, Integer> adjacencies;
+	//public List<Adjacency> adjacenciesList;
 
 
 	/*protected class Adjacency <T extends Object> {
@@ -32,6 +32,13 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 	        this.first = first;
 	        this.second = second;
         }
+
+
+
+        public void print() {
+	        System.out.println(first + " " + second);
+        }
+
     }*/
 
 
@@ -43,8 +50,8 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         this.numberOfVertices = 0;
         this.vertices = new HashMap<T, Integer>();
         this.adjacencies = new boolean[INTMAX][INTMAX];
+        //this.adjacenciesList = new ArrayList<Adjacency>();
 
-        //this.adjacencies = new HashMap<Adjacency, Integer>();
     } // end of AdjMatrix()
     
     
@@ -69,6 +76,13 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         if( srcValue != -1 && tarValue != -1 ) {
             adjacencies[srcValue][tarValue] = true;
             adjacencies[tarValue][srcValue] = true;
+
+            /*try {
+                Adjacency edge = new Adjacency(srcLabel, tarLabel);
+                adjacenciesList.add(edge);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }*/
         }
 
 
@@ -151,7 +165,13 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     
     public void printEdges(PrintWriter os) {
         // Implement me!
-        os.println(adjacencies);
+        //os.println(adjacencies);
+
+        for (int i = numberOfVertices; i >= 0; i--) {
+            for (int j = numberOfVertices; j >=0; j--) {
+                if (adjacencies[i][j]) System.out.println(getKeyByValue(i) + " " + getKeyByValue(j));
+            }
+        }
 
     } // end of printEdges()
     
