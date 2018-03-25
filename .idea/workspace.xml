@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bd3785b0-8647-462b-a0da-2a5264294703" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/SameAdjacencyException.java" />
-      <change beforePath="$PROJECT_DIR$/.classpath" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.project" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.settings/org.eclipse.jdt.core.prefs" afterPath="" />
       <change beforePath="$PROJECT_DIR$/src/AdjMatrix.java" afterPath="$PROJECT_DIR$/src/AdjMatrix.java" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
@@ -21,8 +17,8 @@
       <file leaf-file-name="AdjMatrix.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/AdjMatrix.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="593">
-              <caret line="188" column="8" lean-forward="false" selection-start-line="188" selection-start-column="8" selection-end-line="188" selection-end-column="8" />
+            <state relative-caret-position="278">
+              <caret line="167" column="86" lean-forward="false" selection-start-line="167" selection-start-column="86" selection-end-line="167" selection-end-column="86" />
               <folding />
             </state>
           </provider>
@@ -316,8 +312,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AdjMatrix.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="593">
-          <caret line="188" column="8" lean-forward="false" selection-start-line="188" selection-start-column="8" selection-end-line="188" selection-end-column="8" />
+        <state relative-caret-position="278">
+          <caret line="167" column="86" lean-forward="false" selection-start-line="167" selection-start-column="86" selection-end-line="167" selection-end-column="86" />
           <folding />
         </state>
       </provider>

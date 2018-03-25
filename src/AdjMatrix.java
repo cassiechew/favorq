@@ -165,7 +165,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     	    System.err.println("One or more of these vertecies do not exist!");
         }
 
-        path = findPath(vertLabel2, vertLabel1, new ArrayList<T>,)
+        path = findPath(vertLabel2, vertLabel1, new ArrayList<T>, new ArrayList<T>());
 
         // if we reach this point, source and target are disconnected
         return disconnectedDist;    	
@@ -186,7 +186,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         }
 
        currentPath.add(current);
-        
+
        if ( current == target ){
 
             return currentPath;
