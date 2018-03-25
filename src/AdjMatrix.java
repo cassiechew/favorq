@@ -1,5 +1,4 @@
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
 
 
@@ -14,8 +13,8 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 {
 
     public static final int INTMAX = 50000;
-	public int numberOfVertecies;
-	public Map<T, Integer> verticies;
+	public int numberOfVertices;
+	public Map<T, Integer> vertices;
 	public boolean[][] adjacencies;
 	//public Map<Adjacency, Integer> adjacencies;
 
@@ -41,8 +40,8 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 	 */
     public AdjMatrix() {
     	// Implement me!
-        this.numberOfVertecies = 0;
-        this.verticies = new HashMap<T, Integer>();
+        this.numberOfVertices = 0;
+        this.vertices = new HashMap<T, Integer>();
         this.adjacencies = new boolean[INTMAX][INTMAX];
 
         //this.adjacencies = new HashMap<Adjacency, Integer>();
@@ -51,8 +50,8 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     
     public void addVertex(T vertLabel) {
         // Implement me!
-        if (!verticies.containsKey(vertLabel)) verticies.put(vertLabel, numberOfVertecies);
-        numberOfVertecies++;
+        if (!vertices.containsKey(vertLabel)) vertices.put(vertLabel, numberOfVertices);
+        numberOfVertices++;
     } // end of addVertex()
 
     
@@ -61,12 +60,12 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         int srcValue;
         int tarValue;
 
-        if (!verticies.containsKey(srcLabel) || !verticies.containsKey(tarLabel)) {
-           System.err.print("One of these Edges doesnt Exist!");
+        if (!vertices.containsKey(srcLabel) || !vertices.containsKey(tarLabel)) {
+           System.err.print("One of these Edges doesn't Exist!");
            return;
         }
-        srcValue = verticies.get(srcLabel);
-        tarValue = verticies.get(tarLabel);
+        srcValue = vertices.get(srcLabel);
+        tarValue = vertices.get(tarLabel);
         if( srcValue != -1 && tarValue != -1 ) {
             adjacencies[srcValue][tarValue] = true;
             adjacencies[tarValue][srcValue] = true;
@@ -77,8 +76,8 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 
     private T getKeyByValue (int mapValue) {
 
-        for ( T vertex : verticies.keySet() ) {
-            if ( Objects.equals(mapValue, verticies.get(vertex))) return vertex;
+        for ( T vertex : vertices.keySet() ) {
+            if ( Objects.equals(mapValue, vertices.get(vertex))) return vertex;
         }
         return null;
     }
@@ -87,13 +86,13 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         ArrayList<T> neighbours = new ArrayList<T>();
         int vertValue;
         // Implement me
-        if (!this.verticies.containsKey(vertLabel)) {
-            System.err.println("One of these Edges doesnt Exist!");
+        if (!this.vertices.containsKey(vertLabel)) {
+            System.err.println("One of these Edges doesn't Exist!");
             return null;
         }
 
-        vertValue = verticies.get(vertLabel);
-        for (int i = this.numberOfVertecies; i >= 0; i-- ) {
+        vertValue = vertices.get(vertLabel);
+        for (int i = this.numberOfVertices; i >= 0; i-- ) {
             if (this.adjacencies[vertValue][i] == true) neighbours.add(getKeyByValue(i));
         }
         return neighbours;
@@ -102,34 +101,34 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     
     public void removeVertex(T vertLabel) {
         // Implement me!
-        int vertexValue = verticies.get(vertLabel);
+        int vertexValue = vertices.get(vertLabel);
 
-        if (!verticies.containsKey(vertLabel)) {
+        if (!vertices.containsKey(vertLabel)) {
             System.err.println("That vertex doesn't exist!");
             return;
         }
-        this.verticies.remove(vertLabel);
+        this.vertices.remove(vertLabel);
 
 
-        for (int i = vertexValue; i <= numberOfVertecies; i++) {
+        for (int i = vertexValue; i <= numberOfVertices; i++) {
             adjacencies[i] = Arrays.copyOf(adjacencies[i+1], adjacencies[i+1].length);
         }
 
-        for (int i = vertexValue; i <= numberOfVertecies; i++) {
+        for (int i = vertexValue; i <= numberOfVertices; i++) {
             //adjacencies[i] = Arrays.copyOf(adjacencies[i+1], adjacencies[i+1].length);
-            for (int j = vertexValue; j <= numberOfVertecies; j++) {
+            for (int j = vertexValue; j <= numberOfVertices; j++) {
                 adjacencies[i][j] = adjacencies[i][j+1];
             }
         }
-        numberOfVertecies--;
+        numberOfVertices--;
     } // end of removeVertex()
 	
     
     public void removeEdge(T srcLabel, T tarLabel) {
         // Implement me!
 
-        int srcValue = verticies.get(srcLabel);
-        int tarValue = verticies.get(tarLabel);
+        int srcValue = vertices.get(srcLabel);
+        int tarValue = vertices.get(tarLabel);
 
         if (!adjacencies[srcValue][tarValue] || !adjacencies[tarValue][srcValue] ) {
             System.err.println("That edge doesn't exist!");
@@ -144,7 +143,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     
     public void printVertices(PrintWriter os) {
         // Implement me!
-        for ( T vertex : verticies.keySet() ) {
+        for ( T vertex : vertices.keySet() ) {
             os.println(vertex);
         }
     } // end of printVertices()
@@ -161,7 +160,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     	// Implement me!
     	List<T> path;
 
-        if (!verticies.containsKey(vertLabel1) || !verticies.containsKey(vertLabel2)) {
+        if (!vertices.containsKey(vertLabel1) || !vertices.containsKey(vertLabel2)) {
     	    System.err.println("One or more of these vertecies do not exist!");
         }
 
@@ -173,19 +172,20 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 
     private List<T> findPath (T target, T current, List<T> visited, List<T> currentPath) {
 
-        List<T> possibleVertecies = neighbours(current);
+        List<T> possibleVertices = neighbours(current);
         List<T> possiblePath = null;
         //List<T> currentPath;
-        //int possiblePaths = possibleVertecies.size();
+        //int possiblePaths = possibleVertices.size();
 
         for (T check : visited) {
-            if (visited.contains(check)) {
-                possibleVertecies.remove(check);
+            if (possibleVertices.contains(check)) {
+                possibleVertices.remove(check);
                 //possiblePaths--;
             }
         }
 
-       currentPath.add(current);
+        currentPath.add(current);
+        visited.add(current);
 
        if ( current == target ){
 
@@ -193,7 +193,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         }
 
 
-        for ( T node : possibleVertecies) {
+        for ( T node : possibleVertices) {
             possiblePath = findPath(target, node, visited, currentPath);
             if (possiblePath.contains(target)) {
                 possiblePath.add(current);
