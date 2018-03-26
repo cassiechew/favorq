@@ -178,19 +178,49 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     
     public int shortestPathDistance(T vertLabel1, T vertLabel2) {
     	// Implement me!
-    	List<T> path;
+    	Queue<T> path;
+    	Queue<T> savedPath;
+    	List<T> visited;
+
+    	T node;
 
         if (!vertices.containsKey(vertLabel1) || !vertices.containsKey(vertLabel2)) {
     	    System.err.println("One or more of these vertecies do not exist!");
         }
 
-        path = findPath(vertLabel2, vertLabel1, new ArrayList<T>(), new ArrayList<T>());
+        path = new ArrayDeque<T>();
+        savedPath = new ArrayDeque<T>();
+        visited = new ArrayList<T>();
+
+        //path = findPath(vertLabel2, vertLabel1, new ArrayList<T>(), new ArrayList<T>());
+
+        path.add(vertLabel1);
+
+        while (!path.isEmpty()) {
+            node = path.remove();
+
+            if (node == vertLabel2) {
+                savedPath.add(node);
+                return savedPath.size();
+            }
+            else if (visited.contains(node)) {
+                continue;
+            }
+            else {
+                visited.add(node);
+                savedPath.add(node);
+                path.addAll(neighbours(node));
+
+            }
+            savedPath.remove(node);
+        }
+
 
         // if we reach this point, source and target are disconnected
         return disconnectedDist;    	
     } // end of shortestPathDistance()
 
-    private List<T> findPath (T target, T current, List<T> visited, List<T> currentPath) {
+    /*private List<T> findPath (T target, T current, List<T> visited, List<T> currentPath, int distance) {
 
         List<T> possibleVertices = neighbours(current);
         List<T> possiblePath = null;
@@ -227,6 +257,6 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 
         return null;
 
-    }
+    }*/
     
 } // end of class AdjMatrix
