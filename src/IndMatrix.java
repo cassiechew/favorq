@@ -99,11 +99,18 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
     
     public void printVertices(PrintWriter os) {
         // Implement me!
+        for (T vertex : vertices) {
+            System.out.println(vertex);
+        }
     } // end of printVertices()
 	
     
     public void printEdges(PrintWriter os) {
         // Implement me!
+        for (int i = edges.size(); i >= 0; i--) {
+            System.out.print(vertices.get(i) + ": ");
+            System.out.println(edges.get(i));
+        }
     } // end of printEdges()
     
     
