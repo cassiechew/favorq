@@ -180,8 +180,11 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     public int shortestPathDistance(T vertLabel1, T vertLabel2) {
     	// Implement me!
     	Queue<T> path;
-    	Queue<T> savedPath;
-    	List<T> visited;
+
+    	/* Dictionary to store path to T */
+        Map<T, Queue<T>> savedPath;
+
+    	Set<T> visited;
 
     	T node;
 
@@ -190,30 +193,44 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         }
 
         path = new ArrayDeque<T>();
-        savedPath = new ArrayDeque<T>();
-        visited = new ArrayList<T>();
+        savedPath = new HashMap<T, Queue<T>>();
+        //savedPath = new ArrayDeque<T>();
+        visited = new HashSet<T>();
 
         //path = findPath(vertLabel2, vertLabel1, new ArrayList<T>(), new ArrayList<T>());
 
         path.add(vertLabel1);
 
         while (!path.isEmpty()) {
+
             node = path.remove();
 
             if (node == vertLabel2) {
-                savedPath.add(node);
-                return savedPath.size();
+                //savedPath.add(node);
+                return savedPath.get(vertLabel2).size();
             }
-            else if (visited.contains(node)) {
-                continue;
-            }
-            else {
-                visited.add(node);
-                savedPath.add(node);
-                path.addAll(neighbours(node));
 
+            for (T child : neighbours(node)) {
+                if (visited.contains(node)) {
+                    continue;
+                }
+                else {
+                    //visited.add(node);
+                    //savedPath.add(node);
+                    savedPath.put(child, new ArrayDeque<>());
+                    if (savedPath.containsKey(node)) {
+                        savedPath.get(child).addAll(savedPath.get(node));
+                    }
+                    else {
+                        savedPath.get(child).add(node);
+                    }
+                    path.addAll(neighbours(node));
+                }
             }
-            savedPath.remove(node);
+            visited.add(node);
+
+
+            //savedPath.remove(node);
         }
 
 
