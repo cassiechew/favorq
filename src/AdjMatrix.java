@@ -13,6 +13,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 {
 
     public static final int INTMAX = 50000;
+
 	public int numberOfVertices;
 	public Map<T, Integer> vertices;
 	public boolean[][] adjacencies;

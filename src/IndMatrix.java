@@ -116,6 +116,8 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
     
     public int shortestPathDistance(T vertLabel1, T vertLabel2) {
     	// Implement me!
+
+
     	
         // if we reach this point, source and target are disconnected
         return disconnectedDist;    	
