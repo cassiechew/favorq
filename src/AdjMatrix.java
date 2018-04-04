@@ -58,8 +58,10 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     
     public void addVertex(T vertLabel) {
         // Implement me!
-        if (!vertices.containsKey(vertLabel)) vertices.put(vertLabel, numberOfVertices);
-        numberOfVertices++;
+        if (!vertices.containsKey(vertLabel)) {
+            vertices.put(vertLabel, numberOfVertices);
+            numberOfVertices++;
+        }
     } // end of addVertex()
 
     

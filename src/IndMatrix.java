@@ -28,7 +28,7 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
     
     public void addVertex(T vertLabel) {
         // Implement me!
-        if (vertices.contains(vertLabel)) {
+        if (!vertices.contains(vertLabel)) {
             System.err.println("Vertex already exists!");
             return;
         }
@@ -40,11 +40,16 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
     public void addEdge(T srcLabel, T tarLabel) {
         // Implement me!
 
+        if (!vertices.contains(srcLabel) || !vertices.contains(tarLabel)) {
+            System.err.println("One of these vertices does not exist!");
+            return;
+        }
+
         List<T> srcList = edges.get(vertices.indexOf(srcLabel));
         List<T> tarList = edges.get(vertices.indexOf(tarLabel));
 
-        if (srcList.contains(tarLabel) || tarList.contains(srcLabel)) {
-            System.err.println("An edge already exists!");
+        if (!srcList.contains(tarLabel) || !tarList.contains(srcLabel)) {
+            //System.err.println("An edge already exists!");
             return;
         }
 
@@ -57,6 +62,11 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
         ArrayList<T> neighbours;// = new ArrayList<T>();
         
         // Implement me!
+
+        if (!vertices.contains(vertLabel)) {
+            System.err.println ("This vertex does not exist!");
+            return null;
+        }
 
         return (ArrayList<T>) edges.get(vertices.indexOf(vertLabel));
 
