@@ -60,7 +60,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         // Implement me!
         if (!vertices.containsKey(vertLabel)) {
             vertices.put(vertLabel, numberOfVertices);
-            numberOfVertices++;
+            numberOfVertices = numberOfVertices + 1;
         }
     } // end of addVertex()
 
@@ -71,7 +71,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         int tarValue;
 
         if (!vertices.containsKey(srcLabel) || !vertices.containsKey(tarLabel)) {
-           System.err.print("One of these Edges doesn't Exist!");
+           System.err.print("One of these vertices doesn't Exist!");
            return;
         }
         srcValue = vertices.get(srcLabel);
@@ -109,9 +109,15 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         }
 
         vertValue = vertices.get(vertLabel);
-        for (int i = this.numberOfVertices; i >= 0; i-- ) {
-            if (this.adjacencies[vertValue][i] == true) neighbours.add(getKeyByValue(i));
+	//System.out.print(vertLabel + " ");
+        for (int i = 0; i < numberOfVertices - 1; i++ ) {
+            if (this.adjacencies[vertValue][i] == true) {
+	 	neighbours.add(getKeyByValue(i));
+	        //System.out.print(getKeyByValue(i));
+	    }
         }
+	//System.out.println();
+	
         return neighbours;
     } // end of neighbours()
     
@@ -124,20 +130,32 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
             System.err.println("That vertex doesn't exist!");
             return;
         }
+	for (T vertex : vertices.keySet()) {
+	    if ( vertices.get(vertex) > vertexValue) {
+		vertices.put(vertex, vertices.get(vertex) - 1);
+	    }
+	}
         this.vertices.remove(vertLabel);
 
 
-        for (int i = vertexValue; i <= numberOfVertices; i++) {
-            adjacencies[i] = Arrays.copyOf(adjacencies[i+1], adjacencies[i+1].length);
+        for (int i = vertexValue; i < numberOfVertices; i++) {
+            //adjacencies[i] = Arrays.copyOf(adjacencies[i+1], adjacencies[i+1].length);
+
+	    for (int j = 0; j < numberOfVertices; j++) {
+	        adjacencies[i][j] = adjacencies[i+1][j];	
+	    }
+
         }
 
-        for (int i = vertexValue; i <= numberOfVertices; i++) {
+        for (int i = 0; i < numberOfVertices - 1; i++) {
             //adjacencies[i] = Arrays.copyOf(adjacencies[i+1], adjacencies[i+1].length);
-            for (int j = vertexValue; j <= numberOfVertices; j++) {
+            for (int j = vertexValue; j < numberOfVertices - 1; j++) {
                 adjacencies[i][j] = adjacencies[i][j+1];
             }
         }
-        numberOfVertices--;
+	//System.out.println("Before rem: " + numberOfVertices);
+        numberOfVertices = numberOfVertices - 1;
+	//System.out.println("After rem:  " + numberOfVertices);
     } // end of removeVertex()
 	
     
@@ -160,32 +178,77 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     
     public void printVertices(PrintWriter os) {
         // Implement me!
-        for ( T vertex : vertices.keySet() ) {
-            os.println(vertex);
+        for ( int i = 0; i < numberOfVertices ; i++ ) {
+            os.print(getKeyByValue(i) + " ");
         }
+	os.println();
     } // end of printVertices()
 	
     
     public void printEdges(PrintWriter os) {
         // Implement me!
-        //os.println(adjacencies);
-
-        for (int i = numberOfVertices; i >= 0; i--) {
-            for (int j = numberOfVertices; j >=0; j--) {
-                if (adjacencies[i][j]) System.out.println(getKeyByValue(i) + " " + getKeyByValue(j));
+        //System.out.println(adjacencies[0]);
+		
+	//System.out.println("The number of vertices is: " + numberOfVertices);
+	
+        for (int i = 0; i <= numberOfVertices; i++) {
+            for (int j = 0; j <= numberOfVertices; j++) {
+                if (adjacencies[i][j]) os.println(getKeyByValue(i) + " " + getKeyByValue(j));
             }
         }
-
+	
     } // end of printEdges()
     
     
     public int shortestPathDistance(T vertLabel1, T vertLabel2) {
     	// Implement me!
+
+	Queue<T> path;
+	boolean[] flags = new boolean[numberOfVertices];	
+ 	int[] pred = new int[numberOfVertices];
+	T node;
+	for (T vertex : vertices.keySet()) {
+	    flags[vertices.get(vertex)] = false;
+	    pred[vertices.get(vertex)] = -1;
+
+	}
+
+	path = new ArrayDeque();
+	
+	flags[vertices.get(vertLabel1)] = true;
+	path.add(vertLabel1);
+    //System.out.println("starting search");
+	while(!path.isEmpty()) {
+		
+	    node = path.remove();
+        //System.out.println(node);
+	    for (T child : neighbours(node)) {
+		    if (flags[vertices.get(child)] == false) {
+		        flags[vertices.get(child)] = true;
+		        pred[vertices.get(child)] = vertices.get(node);
+		        path.add(child);
+		    }
+	    }
+	}
+
+	int pointer = pred[vertices.get(vertLabel2)];
+	int pathLength = 1;
+	//System.out.println("finished search");
+	if (pointer == -1) return -1;
+	
+	while(pointer != vertices.get(vertLabel1)) {
+	    pathLength += 1;
+	    pointer = pred[pointer];
+	}
+	//System.out.println("Length: " + pathLength);
+	return pathLength;
+
+	/*
     	Queue<T> path;
 
-    	/* Dictionary to store path to T */
+    	// Dictionary to store path to T 
         Map<T, Queue<T>> savedPath;
-
+	ArrayList<T> children;
     	Set<T> visited;
 
     	T node;
@@ -193,6 +256,8 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         if (!vertices.containsKey(vertLabel1) || !vertices.containsKey(vertLabel2)) {
     	    System.err.println("One or more of these vertecies do not exist!");
         }
+	
+	System.out.println("Path of : " + vertLabel1 + " " + vertLabel2);
 
         path = new ArrayDeque<T>();
         savedPath = new HashMap<T, Queue<T>>();
@@ -200,44 +265,61 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         visited = new HashSet<T>();
 
         //path = findPath(vertLabel2, vertLabel1, new ArrayList<T>(), new ArrayList<T>());
-
+	int count = 0;
         path.add(vertLabel1);
-
+	//visited.add(vertLabel1);
         while (!path.isEmpty()) {
-
+		
             node = path.remove();
+	    savedPath.put(node, new ArrayDeque<>());
+	    savedPath.get(node).add(node);
+	    children = neighbours(node);
+	    if (children.size() == 0) {return disconnectedDist;};
+	    System.out.print(node + " ");
+            
+	    System.out.print("CHECK: " + node + " " + vertLabel2);
+	    
+	    if (visited.contains(node)) continue; 
 
-            if (node == vertLabel2) {
-                //savedPath.add(node);
-                return savedPath.get(vertLabel2).size();
-            }
-
-            for (T child : neighbours(node)) {
-                if (visited.contains(node)) {
-                    continue;
-                }
-                else {
+            for (T child : children) {
+                
+                //else {
                     //visited.add(node);
                     //savedPath.add(node);
                     savedPath.put(child, new ArrayDeque<>());
-                    if (savedPath.containsKey(node)) {
-                        savedPath.get(child).addAll(savedPath.get(node));
-                    }
-                    else {
-                        savedPath.get(child).add(node);
-                    }
-                    path.addAll(neighbours(node));
+                if (savedPath.containsKey(node)) {
+		    System.out.println("ADDING: " + savedPath.get(node));
+                    savedPath.get(child).addAll(savedPath.get(node));
+    		    savedPath.get(child).add(child);
+		    System.out.println("[" + child+"]"+"Current: " + savedPath.get(child));
+                }
+                else {
+                   
                 }
             }
+            path.addAll(neighbours(node));
+                //}
+            
+
+	    if (node.equals(vertLabel2)) {
+                //savedPath.add(node);
+                System.out.println("SIZE: " + savedPath.get(vertLabel2));
+                return savedPath.get(vertLabel2).size();
+            }
+	    
+	    
+    	    
+
+
             visited.add(node);
 
 
             //savedPath.remove(node);
         }
 
-
+	*/
         // if we reach this point, source and target are disconnected
-        return disconnectedDist;    	
+      //  return disconnectedDist;    	
     } // end of shortestPathDistance()
 
     /*private List<T> findPath (T target, T current, List<T> visited, List<T> currentPath, int distance) {

@@ -9,5 +9,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="library" name="net.sf.jopt-simple:jopt-simple:5.0.4" level="project" />
+    <orderEntry type="library" name="jopt-simple-5.0.4" level="project" />
+    <orderEntry type="library" exported="" name="jopt-simple-5.0.2" level="project" />
   </component>
 </module>

@@ -28,7 +28,7 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
     
     public void addVertex(T vertLabel) {
         // Implement me!
-        if (!vertices.contains(vertLabel)) {
+        if (vertices.contains(vertLabel)) {
             System.err.println("Vertex already exists!");
             return;
         }
@@ -48,7 +48,7 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
         List<T> srcList = edges.get(vertices.indexOf(srcLabel));
         List<T> tarList = edges.get(vertices.indexOf(tarLabel));
 
-        if (!srcList.contains(tarLabel) || !tarList.contains(srcLabel)) {
+        if (srcList.contains(tarLabel) || tarList.contains(srcLabel)) {
             //System.err.println("An edge already exists!");
             return;
         }
@@ -77,7 +77,7 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
     public void removeVertex(T vertLabel) {
         // Implement me!
         if (!vertices.contains(vertLabel)) {
-            System.err.println("Thie vertex does not exist!");
+            System.err.println("This vertex does not exist!");
             return;
         }
 
@@ -110,26 +110,72 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
     public void printVertices(PrintWriter os) {
         // Implement me!
         for (T vertex : vertices) {
-            System.out.println(vertex);
+            os.print(vertex + " ");
         }
+	os.println();
     } // end of printVertices()
 	
     
     public void printEdges(PrintWriter os) {
         // Implement me!
-        for (int i = edges.size(); i >= 0; i--) {
-            System.out.print(vertices.get(i) + ": ");
-            System.out.println(edges.get(i));
+        //System.err.println("PRINTING EDGES");
+        for (int i = 0; i < edges.size(); i++) {
+	    if (edges.get(i).size() == 0) continue;
+	    for (int j = 0; j < edges.get(i).size(); j++) {
+                os.print(vertices.get(i) + " ");
+                os.println(edges.get(i).get(j));
+	    }
         }
     } // end of printEdges()
     
     
     public int shortestPathDistance(T vertLabel1, T vertLabel2) {
     	// Implement me!
+    	//
+    	Queue<T> path;
+        boolean[] flags = new boolean[vertices.size()];
+        int[] pred = new int[vertices.size()];
+        T node;
+        for (T vertex : vertices) {
+            flags[vertices.indexOf(vertex)] = false;
+            pred[vertices.indexOf(vertex)] = -1;
 
-        Queue<T> path;
+        }
 
-    	/* Dictionary to store path to T */
+        path = new ArrayDeque();
+
+        flags[vertices.indexOf(vertLabel1)] = true;
+        path.add(vertLabel1);
+        //System.out.println("starting search");
+        while(!path.isEmpty()) {
+
+            node = path.remove();
+            //System.out.println(node);
+            for (T child : neighbours(node)) {
+                if (flags[vertices.indexOf(child)] == false)
+                {
+                    flags[vertices.indexOf(child)] = true;
+                    pred[vertices.indexOf(child)] = vertices.indexOf(node);
+                    path.add(child);
+                }
+            }
+        }
+
+        int pointer = pred[vertices.indexOf(vertLabel2)];
+        int pathLength = 1;
+        //System.out.println("finished search");
+        if (pointer == -1) return -1;
+
+        while(pointer != vertices.indexOf(vertLabel1)) {
+            pathLength += 1;
+            pointer = pred[pointer];
+        }
+        //System.out.println("Length: " + pathLength);
+        return pathLength;
+
+        /*Queue<T> path;
+
+    	/ Dictionary to store path to T 
         Map<T, Queue<T>> savedPath;
 
     	Set<T> visited;
@@ -183,7 +229,7 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
 
 
         // if we reach this point, source and target are disconnected
-        return disconnectedDist;    	
+        return disconnectedDist;    	*/
     } // end of shortestPathDistance()
     
 } // end of class IndMatrix
